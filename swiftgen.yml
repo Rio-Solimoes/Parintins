@@ -1,0 +1,28 @@
+input_dir: Sources/Parintins/Resources
+output_dir: Sources/Parintins
+
+xcassets:
+  - inputs:
+      - ParintinsColors.xcassets
+    outputs:
+      - templatePath: multiple-outputs-swift4.stencil
+        output: Themes/ParintinsColors.swift
+        params:
+          publicAccess: true
+          enumName: ParintinsColors
+  - inputs:
+      - CaprichosoColors.xcassets
+    outputs:
+      - templatePath: multiple-outputs-swift4.stencil
+        output: Themes/CaprichosoColors.swift
+        params:
+          publicAccess: true
+          enumName: CaprichosoColors
+  - inputs:
+      - GarantidoColors.xcassets
+    outputs:
+      - templatePath: multiple-outputs-swift4.stencil
+        output: Themes/GarantidoColors.swift
+        params:
+          publicAccess: true
+          enumName: GarantidoColors
