@@ -1,4 +1,6 @@
-import Foundation
+// swiftlint:disable all
+// Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
+
 #if os(macOS)
   import AppKit
 #elseif os(iOS)
@@ -7,10 +9,35 @@ import Foundation
   import UIKit
 #endif
 
+// Deprecated typealiases
+@available(*, deprecated, renamed: "ColorAsset.Color", message: "This typealias will be removed in SwiftGen 7.0")
+public typealias AssetColorTypeAlias = ColorAsset.Color
+
+// swiftlint:disable superfluous_disable_command file_length implicit_return
+
+// MARK: - Asset Catalogs
+
+// swiftlint:disable identifier_name line_length nesting type_body_length type_name
+public enum ColorThemes {
+  public enum Caprichoso {
+    public static let primary = ColorAsset(name: "Caprichoso/primary")
+    public static let secondary = ColorAsset(name: "Caprichoso/secondary")
+  }
+  public enum Garantido {
+    public static let primary = ColorAsset(name: "Garantido/primary")
+    public static let secondary = ColorAsset(name: "Garantido/secondary")
+  }
+  public enum Parintins {
+    public static let primary = ColorAsset(name: "Parintins/primary")
+    public static let secondary = ColorAsset(name: "Parintins/secondary")
+  }
+}
+// swiftlint:enable identifier_name line_length nesting type_body_length type_name
+
 // MARK: - Implementation Details
 
 public final class ColorAsset {
-  public internal(set) var name: String
+  public fileprivate(set) var name: String
 
   #if os(macOS)
   public typealias Color = NSColor
@@ -32,7 +59,7 @@ public final class ColorAsset {
   }
   #endif
 
-  init(name: String) {
+  fileprivate init(name: String) {
     self.name = name
   }
 }
