@@ -12,6 +12,7 @@
   {%- endfor -%}
 {% endmacro %}
 {% set enumName %}{{param.enumName|default:"Asset"}}{% endset %}
+{% set ignoreImplementationDetails %}{{param.ignoreImplementationDetails|default:"false"}}{% endset %}
 {% set arResourceGroupType %}{{param.arResourceGroupTypeName|default:"ARResourceGroupAsset"}}{% endset %}
 {% set colorType %}{{param.colorTypeName|default:"ColorAsset"}}{% endset %}
 {% set dataType %}{{param.dataTypeName|default:"DataAsset"}}{% endset %}
@@ -24,6 +25,7 @@
 {% set hasData %}{% for catalog in catalogs %}{% call hasValuesBlock catalog.assets "data" %}{% endfor %}{% endset %}
 {% set hasImage %}{% for catalog in catalogs %}{% call hasValuesBlock catalog.assets "image" %}{% endfor %}{% endset %}
 {% set hasSymbol %}{% for catalog in catalogs %}{% call hasValuesBlock catalog.assets "symbol" %}{% endfor %}{% endset %}
+{% ifnot ignoreImplementationDetails %}
 #if os(macOS)
   import AppKit
 #elseif os(iOS)
@@ -39,6 +41,9 @@
 #endif
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
+{% else %}
+// swiftlint:disable superfluous_disable_command file_length implicit_return
+{% endif %}
 
 // MARK: - Asset Catalogs
 
@@ -133,7 +138,7 @@
   {% endif %}
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
-
+{% ifnot ignoreImplementationDetails %}
 // MARK: - Implementation Details
 {% if hasARResourceGroup %}
 
@@ -421,6 +426,7 @@ private final class BundleToken {
   }()
 }
 // swiftlint:enable convenience_type
+{% endif %}
 {% endif %}
 {% else %}
 // No assets found

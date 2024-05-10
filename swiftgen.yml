@@ -4,11 +4,29 @@ output_dir: Sources/Parintins
 xcassets:
   - inputs:
       - Themes.xcassets
+      - Shared.xcassets
+    outputs:
+      - templatePath: swift5-swiftui-implementation-details.stencil
+        output: ImplementationDetails.swift
+        params:
+          publicAccess: true
+  - inputs:
+      - Themes.xcassets
     outputs:
       - templatePath: swift5-swiftui-themes.stencil
         output: Themes.swift
         params:
           publicAccess: true
           enumName: Themes
+          ignoreImplementationDetails: true
           theme:
             protocolName: Theme
+  - inputs:
+      - Shared.xcassets
+    outputs:
+      - templatePath: swift5-swiftui.stencil
+        output: Shared.swift
+        params:
+          publicAccess: true
+          enumName: Shared
+          ignoreImplementationDetails: true
