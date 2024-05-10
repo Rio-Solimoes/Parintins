@@ -11,7 +11,7 @@
     {%- endif -%}
   {%- endfor -%}
 {% endmacro %}
-{% set themeProtocolName %}{{param.theme.protocolName|default:"Theme"}}
+{% set themeProtocolName %}{{param.theme.protocolName|default:"ThemeProtocol"}}{% endset %}
 {% set enumName %}{{param.enumName|default:"Asset"}}{% endset %}
 {% set arResourceGroupType %}{{param.arResourceGroupTypeName|default:"ARResourceGroupAsset"}}{% endset %}
 {% set colorType %}{{param.colorTypeName|default:"ColorAsset"}}{% endset %}
@@ -39,11 +39,35 @@
   import SwiftUI
 #endif
 
-{{accessModifier}} protocol {{colorThemeProtocolName}} {
-
-}
-
 // swiftlint:disable superfluous_disable_command file_length implicit_return
+
+// MARK: - Theme Protocol
+
+{% macro protocolBlock assets %}
+  {% for asset in assets %}
+  {% if asset.items and ( forceNamespaces == "true" or asset.isNamespaced == "true" ) %}
+  {% for assetItem in asset.items %}
+  {% if assetItem.type == "arresourcegroup" %}
+  var {{assetItem.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}: {{arResourceGroupType}} { get }
+  {% elif assetItem.type == "color" %}
+  var {{assetItem.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}: {{colorType}} { get }
+  {% elif assetItem.type == "data" %}
+  var {{assetItem.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}: {{dataType}} { get }
+  {% elif assetItem.type == "image" %}
+  var {{assetItem.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}: {{imageType}} { get }
+  {% elif assetItem.type == "symbol" %}
+  var {{assetItem.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}: {{symbolType}} { get }
+  {% endif %} 
+  {% endfor %}
+  {% break %}
+  {% endif %}
+  {% endfor %}
+{% endmacro %}
+{{accessModifier}} protocol {{themeProtocolName}} {
+  {% for catalog in catalogs %}
+  {% call protocolBlock catalog.assets %}
+  {% endfor %}
+}
 
 // MARK: - Asset Catalogs
 
@@ -93,18 +117,20 @@
 {% macro casesBlock assets %}
   {% for asset in assets %}
   {% if asset.type == "arresourcegroup" %}
-  {{accessModifier}} static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{arResourceGroupType}}(name: "{{asset.value}}")
+  {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{arResourceGroupType}}(name: "{{asset.value}}")
   {% elif asset.type == "color" %}
-  {{accessModifier}} static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{colorType}}(name: "{{asset.value}}")
+  {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{colorType}}(name: "{{asset.value}}")
   {% elif asset.type == "data" %}
-  {{accessModifier}} static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{dataType}}(name: "{{asset.value}}")
+  {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{dataType}}(name: "{{asset.value}}")
   {% elif asset.type == "image" %}
-  {{accessModifier}} static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{imageType}}(name: "{{asset.value}}")
+  {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{imageType}}(name: "{{asset.value}}")
   {% elif asset.type == "symbol" %}
-  {{accessModifier}} static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{symbolType}}(name: "{{asset.value}}")
+  {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{symbolType}}(name: "{{asset.value}}")
   {% elif asset.items and ( forceNamespaces == "true" or asset.isNamespaced == "true" ) %}
-  {{accessModifier}} enum {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}} {
+  {{accessModifier}} struct {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}: {{themeProtocolName}} {
     {% filter indent:2," ",true %}{% call casesBlock asset.items %}{% endfilter %}
+
+    {{accessModifier}} init() {}
   }
   {% elif asset.items %}
   {% call casesBlock asset.items %}

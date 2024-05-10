@@ -3,10 +3,12 @@ output_dir: Sources/Parintins
 
 xcassets:
   - inputs:
-      - Colors.xcassets
+      - Themes.xcassets
     outputs:
-      - templatePath: swift5-swiftui.stencil
-        output: ColorThemes.swift
+      - templatePath: swift5-swiftui-themes.stencil
+        output: Themes.swift
         params:
           publicAccess: true
-          enumName: ColorThemes
+          enumName: Themes
+          theme:
+            protocolName: Theme
