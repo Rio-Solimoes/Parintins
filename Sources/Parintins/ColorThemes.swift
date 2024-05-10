@@ -26,14 +26,20 @@ public enum ColorThemes {
   public struct Caprichoso: ColorTheme {
     public let primary = ColorAsset(name: "Caprichoso/primary")
     public let secondary = ColorAsset(name: "Caprichoso/secondary")
+      
+    public init() {}
   }
   public struct Garantido: ColorTheme {
     public let primary = ColorAsset(name: "Garantido/primary")
     public let secondary = ColorAsset(name: "Garantido/secondary")
+      
+    public init() {}
   }
   public struct Parintins: ColorTheme {
     public let primary = ColorAsset(name: "Parintins/primary")
     public let secondary = ColorAsset(name: "Parintins/secondary")
+      
+    public init() {}
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
