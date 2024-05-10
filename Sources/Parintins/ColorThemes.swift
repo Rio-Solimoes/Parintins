@@ -12,21 +12,26 @@
   import SwiftUI
 #endif
 
+protocol ColorTheme {
+    static var primary: ColorAsset { get }
+    static var secondary: ColorAsset { get }
+}
+
 // swiftlint:disable superfluous_disable_command file_length implicit_return
 
 // MARK: - Asset Catalogs
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum ColorThemes {
-  public enum Caprichoso {
+  public enum Caprichoso: ColorTheme {
     public static let primary = ColorAsset(name: "Caprichoso/primary")
     public static let secondary = ColorAsset(name: "Caprichoso/secondary")
   }
-  public enum Garantido {
+  public enum Garantido: ColorTheme {
     public static let primary = ColorAsset(name: "Garantido/primary")
     public static let secondary = ColorAsset(name: "Garantido/secondary")
   }
-  public enum Parintins {
+  public enum Parintins: ColorTheme {
     public static let primary = ColorAsset(name: "Parintins/primary")
     public static let secondary = ColorAsset(name: "Parintins/secondary")
   }
