@@ -23,17 +23,17 @@ public protocol ColorTheme {
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum ColorThemes {
-  struct Caprichoso: ColorTheme {
-    let primary = ColorAsset(name: "Caprichoso/primary")
-    let secondary = ColorAsset(name: "Caprichoso/secondary")
+  public struct Caprichoso: ColorTheme {
+    public let primary = ColorAsset(name: "Caprichoso/primary")
+    public let secondary = ColorAsset(name: "Caprichoso/secondary")
   }
-  struct Garantido: ColorTheme {
-    let primary = ColorAsset(name: "Garantido/primary")
-    let secondary = ColorAsset(name: "Garantido/secondary")
+  public struct Garantido: ColorTheme {
+    public let primary = ColorAsset(name: "Garantido/primary")
+    public let secondary = ColorAsset(name: "Garantido/secondary")
   }
-  struct Parintins: ColorTheme {
-    let primary = ColorAsset(name: "Parintins/primary")
-    let secondary = ColorAsset(name: "Parintins/secondary")
+  public struct Parintins: ColorTheme {
+    public let primary = ColorAsset(name: "Parintins/primary")
+    public let secondary = ColorAsset(name: "Parintins/secondary")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
