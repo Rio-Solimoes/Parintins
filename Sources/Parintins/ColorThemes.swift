@@ -12,7 +12,7 @@
   import SwiftUI
 #endif
 
-protocol ColorTheme {
+public protocol ColorTheme {
     static var primary: ColorAsset { get }
     static var secondary: ColorAsset { get }
 }
