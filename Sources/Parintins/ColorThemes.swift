@@ -8,10 +8,9 @@
 #elseif os(tvOS) || os(watchOS)
   import UIKit
 #endif
-
-// Deprecated typealiases
-@available(*, deprecated, renamed: "ColorAsset.Color", message: "This typealias will be removed in SwiftGen 7.0")
-public typealias AssetColorTypeAlias = ColorAsset.Color
+#if canImport(SwiftUI)
+  import SwiftUI
+#endif
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
 
@@ -46,7 +45,12 @@ public final class ColorAsset {
   #endif
 
   @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
-  public private(set) lazy var color: Color = Color(asset: self)
+  public private(set) lazy var color: Color = {
+    guard let color = Color(asset: self) else {
+      fatalError("Unable to load color asset named \(name).")
+    }
+    return color
+  }()
 
   #if os(iOS) || os(tvOS)
   @available(iOS 11.0, tvOS 11.0, *)
@@ -59,6 +63,13 @@ public final class ColorAsset {
   }
   #endif
 
+  @available(iOS 14.0, macOS 11.0, *)
+  public var swiftUIColor: SwiftUI.Color {
+    get {
+      SwiftUI.Color(asset: self)
+    }
+  }
+
   fileprivate init(name: String) {
     self.name = name
   }
@@ -66,7 +77,7 @@ public final class ColorAsset {
 
 public extension ColorAsset.Color {
   @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
-  convenience init!(asset: ColorAsset) {
+  convenience init?(asset: ColorAsset) {
     let bundle = BundleToken.bundle
     #if os(iOS) || os(tvOS)
     self.init(named: asset.name, in: bundle, compatibleWith: nil)
@@ -77,6 +88,16 @@ public extension ColorAsset.Color {
     #endif
   }
 }
+
+#if canImport(SwiftUI)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+public extension SwiftUI.Color {
+  init(asset: ColorAsset) {
+    let bundle = BundleToken.bundle
+    self.init(asset.name, bundle: bundle)
+  }
+}
+#endif
 
 // swiftlint:disable convenience_type
 private final class BundleToken {
@@ -89,3 +110,4 @@ private final class BundleToken {
   }()
 }
 // swiftlint:enable convenience_type
+

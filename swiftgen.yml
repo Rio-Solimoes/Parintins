@@ -5,32 +5,8 @@ xcassets:
   - inputs:
       - Colors.xcassets
     outputs:
-      - templateName: swift4
+      - templatePath: swift5-swiftui.stencil
         output: ColorThemes.swift
         params:
           publicAccess: true
           enumName: ColorThemes
-  # - inputs:
-  #     - ParintinsColors.xcassets
-  #   outputs:
-  #     - templatePath: multiple-outputs-swift4.stencil
-  #       output: Themes/ParintinsColors.swift
-  #       params:
-  #         publicAccess: true
-  #         enumName: ParintinsColors
-  # - inputs:
-  #     - CaprichosoColors.xcassets
-  #   outputs:
-  #     - templatePath: multiple-outputs-swift4.stencil
-  #       output: Themes/CaprichosoColors.swift
-  #       params:
-  #         publicAccess: true
-  #         enumName: CaprichosoColors
-  # - inputs:
-  #     - GarantidoColors.xcassets
-  #   outputs:
-  #     - templatePath: multiple-outputs-swift4.stencil
-  #       output: Themes/GarantidoColors.swift
-  #       params:
-  #         publicAccess: true
-  #         enumName: GarantidoColors
