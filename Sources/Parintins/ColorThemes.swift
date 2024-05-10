@@ -13,8 +13,8 @@
 #endif
 
 public protocol ColorTheme {
-    static var primary: ColorAsset { get }
-    static var secondary: ColorAsset { get }
+    var primary: ColorAsset { get }
+    var secondary: ColorAsset { get }
 }
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
@@ -23,17 +23,17 @@ public protocol ColorTheme {
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum ColorThemes {
-  public enum Caprichoso: ColorTheme {
-    public static let primary = ColorAsset(name: "Caprichoso/primary")
-    public static let secondary = ColorAsset(name: "Caprichoso/secondary")
+  struct Caprichoso: ColorTheme {
+    let primary = ColorAsset(name: "Caprichoso/primary")
+    let secondary = ColorAsset(name: "Caprichoso/secondary")
   }
-  public enum Garantido: ColorTheme {
-    public static let primary = ColorAsset(name: "Garantido/primary")
-    public static let secondary = ColorAsset(name: "Garantido/secondary")
+  struct Garantido: ColorTheme {
+    let primary = ColorAsset(name: "Garantido/primary")
+    let secondary = ColorAsset(name: "Garantido/secondary")
   }
-  public enum Parintins: ColorTheme {
-    public static let primary = ColorAsset(name: "Parintins/primary")
-    public static let secondary = ColorAsset(name: "Parintins/secondary")
+  struct Parintins: ColorTheme {
+    let primary = ColorAsset(name: "Parintins/primary")
+    let secondary = ColorAsset(name: "Parintins/secondary")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
