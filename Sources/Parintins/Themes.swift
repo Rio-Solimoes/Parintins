@@ -19,6 +19,8 @@ public protocol Theme {
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum Themes {
   public struct Caprichoso: Theme {
+    static let userDefaultKey = "Caprichoso"
+      
     public let menu = ImageAsset(name: "Caprichoso/menu")
     public let orders = ImageAsset(name: "Caprichoso/orders")
     public let primary = ColorAsset(name: "Caprichoso/primary")
@@ -29,6 +31,8 @@ public enum Themes {
     public init() {}
   }
   public struct Garantido: Theme {
+    static let userDefaultKey = "Garantido"
+
     public let menu = ImageAsset(name: "Garantido/menu")
     public let orders = ImageAsset(name: "Garantido/orders")
     public let primary = ColorAsset(name: "Garantido/primary")
@@ -39,6 +43,8 @@ public enum Themes {
     public init() {}
   }
   public struct Parintins: Theme {
+    static let userDefaultKey = "Parintins"
+    
     public let menu = ImageAsset(name: "Parintins/menu")
     public let orders = ImageAsset(name: "Parintins/orders")
     public let primary = ColorAsset(name: "Parintins/primary")
