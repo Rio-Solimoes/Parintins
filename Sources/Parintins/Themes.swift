@@ -18,14 +18,14 @@
 
 @available(macOS 14.0, *)
 @Observable
-class ThemeManager {
-    var selectedTheme: Theme {
+public class ThemeManager {
+    public var selectedTheme: Theme {
         didSet {
             UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "selectedThemeName")
         }
     }
     
-    init() {
+    public init() {
         guard let selectedThemeName = UserDefaults.standard.string(forKey: "selectedThemeName"),
               let selectedTheme = ThemeManager.getTheme(named: selectedThemeName) else {
             self.selectedTheme = Themes.defaultTheme
