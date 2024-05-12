@@ -1,7 +1,43 @@
 // swiftlint:disable all
 // Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
 
+#if os(macOS)
+  import AppKit
+#elseif os(iOS)
+  import UIKit
+#elseif os(tvOS) || os(watchOS)
+  import UIKit
+#endif
+#if canImport(SwiftUI)
+  import SwiftUI
+#endif
+
 // swiftlint:disable superfluous_disable_command file_length implicit_return
+
+// MARK: - Theme Manager
+
+@available(macOS 14.0, *)
+@Observable
+class ThemeManager {
+    var selectedTheme: Theme {
+        didSet {
+            UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "selectedThemeName")
+        }
+    }
+    
+    init() {
+        guard let selectedThemeName = UserDefaults.standard.string(forKey: "selectedThemeName"),
+              let selectedTheme = ThemeManager.getTheme(named: selectedThemeName) else {
+            self.selectedTheme = Themes.defaultTheme
+            return
+        }
+        self.selectedTheme = selectedTheme
+    }
+    
+    private static func getTheme(named name: String) -> Theme? {
+        return Themes.allThemes.first(where: { $0.name == name })?.theme
+    }
+}
 
 // MARK: - Theme Protocol
 
