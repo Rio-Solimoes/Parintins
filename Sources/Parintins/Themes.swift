@@ -16,10 +16,9 @@
 
 // MARK: - Theme Manager
 
-@available(iOS 17.0, macOS 14.0, *)
-@Observable
-public class ThemeManager {
-    public var selectedTheme: Theme {
+@available(macOS 14.0, *)
+public class ThemeManager: ObservableObject {
+    @Published public var selectedTheme: Theme {
         didSet {
             UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "selectedThemeName")
         }
