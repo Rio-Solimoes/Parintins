@@ -16,7 +16,7 @@
 
 // MARK: - Theme Manager
 
-@available(macOS 14.0, *)
+@available(iOS 13.0, macOS 14.0, *)
 public class ThemeManager: ObservableObject {
     @Published public var selectedTheme: Theme {
         didSet {
