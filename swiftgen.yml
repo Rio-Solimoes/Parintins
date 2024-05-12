@@ -17,12 +17,9 @@ xcassets:
         output: Themes.swift
         params:
           publicAccess: true
-          enumName: Themes
           ignoreImplementationDetails: true
           theme:
-            protocolName: Theme
             defaultTheme: Parintins
-            includeUserDefaultsValues: true
   - inputs:
       - Shared.xcassets
     outputs:

@@ -1,6 +1,10 @@
 // swiftlint:disable all
 // Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
 
+#if canImport(SwiftUI)
+  import SwiftUI
+#endif
+
 {% if catalogs %}
 {% macro hasValuesBlock assets filter %}
   {%- for asset in assets -%}
@@ -11,10 +15,13 @@
     {%- endif -%}
   {%- endfor -%}
 {% endmacro %}
-{% set themeProtocolName %}{{param.theme.protocolName|default:"ThemeProtocol"}}{% endset %}
+{% set themeManagerName %}{{param.theme.managerName|default:"ThemeManager"}}{% endset %}
+{% set themeProtocolName %}{{param.theme.protocolName|default:"Theme"}}{% endset %}
 {% set defaultTheme %}{{param.theme.defaultTheme|default:catalogs.first.assets.first.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}{% endset %}
-{% set includeUserDefaultsValues %}{{param.theme.includeUserDefaultsValues|default:"false"}}{% endset %}
-{% set enumName %}{{param.enumName|default:"Asset"}}{% endset %}
+{% set persistence %}{{param.theme.persistence|default:"true"}}{% endset %}
+{% set userDefaultsKey %}{{param.theme.userDefaultsKey|default:"selectedThemeName"}}{% endset %}
+{% set ignoreUserDefaultsValues %}{{param.theme.ignoreUserDefaultsValues|default:"true"}}{% endset %}
+{% set enumName %}{{param.enumName|default:"Themes"}}{% endset %}
 {% set ignoreImplementationDetails %}{{param.ignoreImplementationDetails|default:"false"}}{% endset %}
 {% set arResourceGroupType %}{{param.arResourceGroupTypeName|default:"ARResourceGroupAsset"}}{% endset %}
 {% set colorType %}{{param.colorTypeName|default:"ColorAsset"}}{% endset %}
@@ -28,7 +35,7 @@
 {% set hasData %}{% for catalog in catalogs %}{% call hasValuesBlock catalog.assets "data" %}{% endfor %}{% endset %}
 {% set hasImage %}{% for catalog in catalogs %}{% call hasValuesBlock catalog.assets "image" %}{% endfor %}{% endset %}
 {% set hasSymbol %}{% for catalog in catalogs %}{% call hasValuesBlock catalog.assets "symbol" %}{% endfor %}{% endset %}
-{% ifnot ignoreImplementationDetails %}
+{% if not ignoreImplementationDetails %}
 #if os(macOS)
   import AppKit
 #elseif os(iOS)
@@ -47,6 +54,34 @@
 {% else %}
 // swiftlint:disable superfluous_disable_command file_length implicit_return
 {% endif %}
+
+// MARK: - Theme Manager
+
+@available(iOS 13.0, macOS 14.0, *)
+{{accessModifier}} class {{themeManagerName}}: ObservableObject {
+  {% if persistence %}
+  @Published {{accessModifier}} var selectedTheme: {{themeProtocolName}} {
+    didSet {
+      UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "{{userDefaultsKey}}")
+    }
+  }
+
+  {{accessModifier}} init() {
+    guard let {{userDefaultsKey}} = UserDefaults.standard.string(forKey: "{{userDefaultsKey}}"),
+          let selectedTheme = {{themeManagerName}}.getTheme(named: {{userDefaultsKey}}) else {
+      self.selectedTheme = {{enumName}}.defaultTheme
+      return
+    }
+    self.selectedTheme = selectedTheme
+  }
+
+  private static func getTheme(named name: String) -> {{themeProtocolName}}? {
+    return {{enumName}}.allThemes.first(where: { $0.name == name })?.theme
+  }
+  {% else %}
+  @Published {{accessModifier}} var selectedTheme: {{themeProtocolName}} = {{enumName}}.defaultTheme
+  {% endif %}
+}
 
 // MARK: - Theme Protocol
 
@@ -71,7 +106,7 @@
   {% endfor %}
 {% endmacro %}
 {{accessModifier}} protocol {{themeProtocolName}} {
-  {% if includeUserDefaultsValues %}
+  {% if persistence or not ignoreUserDefaultsValues %}
   var userDefaultsValue: String { get }
   {% endif %}
   {% call protocolBlock catalogs.first.assets %}
@@ -95,7 +130,7 @@
   {{accessModifier}} struct {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}: {{themeProtocolName}} {
     {{accessModifier}} static let shared = {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}()
 
-    {% if includeUserDefaultsValues %}
+    {% if persistence or not ignoreUserDefaultsValues %}
     {{accessModifier}} let userDefaultsValue = "{{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}"
     {% endif %}
 
@@ -121,7 +156,7 @@
   {% call propertiesBlock catalogs.first.assets %}
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
-{% ifnot ignoreImplementationDetails %}
+{% if not ignoreImplementationDetails %}
 // MARK: - Implementation Details
 {% if hasARResourceGroup %}
 

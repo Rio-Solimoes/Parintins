@@ -1,13 +1,6 @@
 // swiftlint:disable all
 // Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
 
-#if os(macOS)
-  import AppKit
-#elseif os(iOS)
-  import UIKit
-#elseif os(tvOS) || os(watchOS)
-  import UIKit
-#endif
 #if canImport(SwiftUI)
   import SwiftUI
 #endif
@@ -18,24 +11,24 @@
 
 @available(iOS 13.0, macOS 14.0, *)
 public class ThemeManager: ObservableObject {
-    @Published public var selectedTheme: Theme {
-        didSet {
-            UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "selectedThemeName")
-        }
+  @Published public var selectedTheme: Theme {
+    didSet {
+      UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "selectedThemeName")
     }
-    
-    public init() {
-        guard let selectedThemeName = UserDefaults.standard.string(forKey: "selectedThemeName"),
-              let selectedTheme = ThemeManager.getTheme(named: selectedThemeName) else {
-            self.selectedTheme = Themes.defaultTheme
-            return
-        }
-        self.selectedTheme = selectedTheme
+  }
+
+  public init() {
+    guard let selectedThemeName = UserDefaults.standard.string(forKey: "selectedThemeName"),
+          let selectedTheme = ThemeManager.getTheme(named: selectedThemeName) else {
+      self.selectedTheme = Themes.defaultTheme
+      return
     }
-    
-    private static func getTheme(named name: String) -> Theme? {
-        return Themes.allThemes.first(where: { $0.name == name })?.theme
-    }
+    self.selectedTheme = selectedTheme
+  }
+
+  private static func getTheme(named name: String) -> Theme? {
+    return Themes.allThemes.first(where: { $0.name == name })?.theme
+  }
 }
 
 // MARK: - Theme Protocol
