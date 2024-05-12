@@ -15,22 +15,22 @@ public protocol Theme {
   var secondary: ColorAsset { get }
 }
 
-// MARK: - Asset Catalogs
+// MARK: - Theme Assets
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum Themes {
   public static let allThemes: [(name: String, theme: Theme)] = [
     ("Caprichoso", Caprichoso.shared),
     ("Garantido", Garantido.shared),
-    ("Parintins", Parintins.shared)
+    ("Parintins", Parintins.shared),
   ]
-  public static let defaultTheme: Theme = Parintins()
-    
+  public static let defaultTheme: Theme = Parintins.shared
+
   public struct Caprichoso: Theme {
     public static let shared = Caprichoso()
-      
+
     public let userDefaultsValue = "Caprichoso"
-      
+
     public let menu = ImageAsset(name: "Caprichoso/menu")
     public let orders = ImageAsset(name: "Caprichoso/orders")
     public let primary = ColorAsset(name: "Caprichoso/primary")
@@ -40,7 +40,7 @@ public enum Themes {
   }
   public struct Garantido: Theme {
     public static let shared = Garantido()
-      
+
     public let userDefaultsValue = "Garantido"
 
     public let menu = ImageAsset(name: "Garantido/menu")
@@ -52,9 +52,9 @@ public enum Themes {
   }
   public struct Parintins: Theme {
     public static let shared = Parintins()
-      
+
     public let userDefaultsValue = "Parintins"
-    
+
     public let menu = ImageAsset(name: "Parintins/menu")
     public let orders = ImageAsset(name: "Parintins/orders")
     public let primary = ColorAsset(name: "Parintins/primary")

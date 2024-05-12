@@ -12,6 +12,8 @@
   {%- endfor -%}
 {% endmacro %}
 {% set themeProtocolName %}{{param.theme.protocolName|default:"ThemeProtocol"}}{% endset %}
+{% set defaultTheme %}{{param.theme.defaultTheme|default:catalogs.first.assets.first.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}{% endset %}
+{% set includeUserDefaultsValues %}{{param.theme.includeUserDefaultsValues|default:"false"}}{% endset %}
 {% set enumName %}{{param.enumName|default:"Asset"}}{% endset %}
 {% set ignoreImplementationDetails %}{{param.ignoreImplementationDetails|default:"false"}}{% endset %}
 {% set arResourceGroupType %}{{param.arResourceGroupTypeName|default:"ARResourceGroupAsset"}}{% endset %}
@@ -69,57 +71,15 @@
   {% endfor %}
 {% endmacro %}
 {{accessModifier}} protocol {{themeProtocolName}} {
-  {% for catalog in catalogs %}
-  {% call protocolBlock catalog.assets %}
-  {% endfor %}
+  {% if includeUserDefaultsValues %}
+  var userDefaultsValue: String { get }
+  {% endif %}
+  {% call protocolBlock catalogs.first.assets %}
 }
 
-// MARK: - Asset Catalogs
+// MARK: - Theme Assets
 
-{% macro enumBlock assets %}
-  {% call casesBlock assets %}
-  {% if param.allValues %}
-
-  // swiftlint:disable trailing_comma
-  {% set hasItems %}{% call hasValuesBlock assets "arresourcegroup" %}{% endset %}
-  {% if hasItems %}
-  @available(*, deprecated, message: "All values properties are now deprecated")
-  {{accessModifier}} static let allResourceGroups: [{{arResourceGroupType}}] = [
-    {% filter indent:2," ",true %}{% call allValuesBlock assets "arresourcegroup" "" %}{% endfilter %}
-  ]
-  {% endif %}
-  {% set hasItems %}{% call hasValuesBlock assets "color" %}{% endset %}
-  {% if hasItems %}
-  @available(*, deprecated, message: "All values properties are now deprecated")
-  {{accessModifier}} static let allColors: [{{colorType}}] = [
-    {% filter indent:2," ",true %}{% call allValuesBlock assets "color" "" %}{% endfilter %}
-  ]
-  {% endif %}
-  {% set hasItems %}{% call hasValuesBlock assets "data" %}{% endset %}
-  {% if hasItems %}
-  @available(*, deprecated, message: "All values properties are now deprecated")
-  {{accessModifier}} static let allDataAssets: [{{dataType}}] = [
-    {% filter indent:2," ",true %}{% call allValuesBlock assets "data" "" %}{% endfilter %}
-  ]
-  {% endif %}
-  {% set hasItems %}{% call hasValuesBlock assets "image" %}{% endset %}
-  {% if hasItems %}
-  @available(*, deprecated, message: "All values properties are now deprecated")
-  {{accessModifier}} static let allImages: [{{imageType}}] = [
-    {% filter indent:2," ",true %}{% call allValuesBlock assets "image" "" %}{% endfilter %}
-  ]
-  {% endif %}
-  {% set hasItems %}{% call hasValuesBlock assets "symbol" %}{% endset %}
-  {% if hasItems %}
-  @available(*, deprecated, message: "All values properties are now deprecated")
-  {{accessModifier}} static let allSymbols: [{{symbolType}}] = [
-    {% filter indent:2," ",true %}{% call allValuesBlock assets "symbol" "" %}{% endfilter %}
-  ]
-  {% endif %}
-  // swiftlint:enable trailing_comma
-  {% endif %}
-{% endmacro %}
-{% macro casesBlock assets %}
+{% macro propertiesBlock assets %}
   {% for asset in assets %}
   {% if asset.type == "arresourcegroup" %}
   {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{arResourceGroupType}}(name: "{{asset.value}}")
@@ -133,40 +93,32 @@
   {{accessModifier}} let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{symbolType}}(name: "{{asset.value}}")
   {% elif asset.items and ( forceNamespaces == "true" or asset.isNamespaced == "true" ) %}
   {{accessModifier}} struct {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}: {{themeProtocolName}} {
-    {% filter indent:2," ",true %}{% call casesBlock asset.items %}{% endfilter %}
+    {{accessModifier}} static let shared = {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}()
 
-    {{accessModifier}} init() {}
+    {% if includeUserDefaultsValues %}
+    {{accessModifier}} let userDefaultsValue = "{{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}"
+    {% endif %}
+
+    {% filter indent:2," ",true %}{% call propertiesBlock asset.items %}{% endfilter %}
   }
-  {% elif asset.items %}
-  {% call casesBlock asset.items %}
   {% endif %}
   {% endfor %}
 {% endmacro %}
-{% macro allValuesBlock assets filter prefix %}
+{% macro themesBlock assets %}
   {% for asset in assets %}
-  {% if asset.type == filter %}
-  {{prefix}}{{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}},
-  {% elif asset.items and ( forceNamespaces == "true" or asset.isNamespaced == "true" ) %}
-  {% set prefix2 %}{{prefix}}{{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}.{% endset %}
-  {% call allValuesBlock asset.items filter prefix2 %}
-  {% elif asset.items %}
-  {% call allValuesBlock asset.items filter prefix %}
+  {% if asset.items and ( forceNamespaces == "true" or asset.isNamespaced == "true" ) %}
+  ("{{asset.name}}", {{asset.name}}.shared),
   {% endif %}
   {% endfor %}
 {% endmacro %}
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 {{accessModifier}} enum {{enumName}} {
-  {% if catalogs.count > 1 or param.forceFileNameEnum %}
-  {% for catalog in catalogs %}
-  {{accessModifier}} enum {{catalog.name|swiftIdentifier:"pretty"|escapeReservedKeywords}} {
-    {% if catalog.assets %}
-    {% filter indent:2," ",true %}{% call enumBlock catalog.assets %}{% endfilter %}
-    {% endif %}
-  }
-  {% endfor %}
-  {% else %}
-  {% call enumBlock catalogs.first.assets %}
-  {% endif %}
+  {{accessModifier}} static let allThemes: [(name: String, theme: {{themeProtocolName}})] = [
+    {% filter indent:2," ",true %}{% call themesBlock catalogs.first.assets %}{% endfilter %}
+  ]
+  {{accessModifier}} static let defaultTheme: {{themeProtocolName}} = {{defaultTheme}}.shared
+
+  {% call propertiesBlock catalogs.first.assets %}
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 {% ifnot ignoreImplementationDetails %}

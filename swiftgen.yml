@@ -21,6 +21,8 @@ xcassets:
           ignoreImplementationDetails: true
           theme:
             protocolName: Theme
+            defaultTheme: Parintins
+            includeUserDefaultsValues: true
   - inputs:
       - Shared.xcassets
     outputs:
