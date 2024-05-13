@@ -16,6 +16,7 @@
   {%- endfor -%}
 {% endmacro %}
 {% set themeManagerName %}{{param.theme.managerName|default:"ThemeManager"}}{% endset %}
+{% set themeManagerSingleton %}{{param.theme.managerSingleton|default:"true"}}{% endset %}
 {% set themeProtocolName %}{{param.theme.protocolName|default:"Theme"}}{% endset %}
 {% set defaultTheme %}{{param.theme.defaultTheme|default:catalogs.first.assets.first.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}{% endset %}
 {% set persistence %}{{param.theme.persistence|default:"true"}}{% endset %}
@@ -60,13 +61,18 @@
 @available(iOS 13.0, macOS 14.0, *)
 {{accessModifier}} class {{themeManagerName}}: ObservableObject {
   {% if persistence %}
+  {% if themeManagerSingleton %}
+  {{accessModifier}} static let shared = {{themeManagerName}}()
+  {% endif %}
+
+  
   @Published {{accessModifier}} var selectedTheme: {{themeProtocolName}} {
     didSet {
       UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "{{userDefaultsKey}}")
     }
   }
 
-  {{accessModifier}} init() {
+  private init() {
     guard let {{userDefaultsKey}} = UserDefaults.standard.string(forKey: "{{userDefaultsKey}}"),
           let selectedTheme = {{themeManagerName}}.getTheme(named: {{userDefaultsKey}}) else {
       self.selectedTheme = {{enumName}}.defaultTheme
@@ -75,7 +81,7 @@
     self.selectedTheme = selectedTheme
   }
 
-  private static func getTheme(named name: String) -> {{themeProtocolName}}? {
+  {% if themeManagerSingleton %}private{% else %}public{% endif %} static func getTheme(named name: String) -> {{themeProtocolName}}? {
     return {{enumName}}.allThemes.first(where: { $0.name == name })?.theme
   }
   {% else %}

@@ -11,13 +11,15 @@
 
 @available(iOS 13.0, macOS 14.0, *)
 public class ThemeManager: ObservableObject {
+  public static let shared = ThemeManager()
+
   @Published public var selectedTheme: Theme {
     didSet {
       UserDefaults.standard.set(selectedTheme.userDefaultsValue, forKey: "selectedThemeName")
     }
   }
 
-  public init() {
+  private init() {
     guard let selectedThemeName = UserDefaults.standard.string(forKey: "selectedThemeName"),
           let selectedTheme = ThemeManager.getTheme(named: selectedThemeName) else {
       self.selectedTheme = Themes.defaultTheme
