@@ -43,6 +43,7 @@ public protocol Theme {
   var profileDefault: ImageAsset { get }
   var search: ImageAsset { get }
   var secondary: ColorAsset { get }
+  var tertiary: ColorAsset { get }
 }
 
 // MARK: - Theme Assets
@@ -67,6 +68,7 @@ public enum Themes {
     public let profileDefault = ImageAsset(name: "Caprichoso/profileDefault")
     public let search = ImageAsset(name: "Caprichoso/search")
     public let secondary = ColorAsset(name: "Caprichoso/secondary")
+    public let tertiary = ColorAsset(name: "Caprichoso/tertiary")
   }
   public struct Garantido: Theme {
     public static let shared = Garantido()
@@ -79,6 +81,7 @@ public enum Themes {
     public let profileDefault = ImageAsset(name: "Garantido/profileDefault")
     public let search = ImageAsset(name: "Garantido/search")
     public let secondary = ColorAsset(name: "Garantido/secondary")
+    public let tertiary = ColorAsset(name: "Garantido/tertiary")
   }
   public struct Parintins: Theme {
     public static let shared = Parintins()
@@ -91,6 +94,7 @@ public enum Themes {
     public let profileDefault = ImageAsset(name: "Parintins/profileDefault")
     public let search = ImageAsset(name: "Parintins/search")
     public let secondary = ColorAsset(name: "Parintins/secondary")
+    public let tertiary = ColorAsset(name: "Parintins/tertiary")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
