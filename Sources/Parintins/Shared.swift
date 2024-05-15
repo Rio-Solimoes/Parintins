@@ -18,6 +18,11 @@ public enum Shared {
   public static let salads = ImageAsset(name: "salads")
   public static let seafood = ImageAsset(name: "seafood")
   public static let emptyDish = ImageAsset(name: "emptyDish")
+  public enum GrayColors {
+    public static let darkGray = ColorAsset(name: "grayColors/darkGray")
+    public static let lightGray = ColorAsset(name: "grayColors/lightGray")
+    public static let mediumGray = ColorAsset(name: "grayColors/mediumGray")
+  }
   public static let menu = ImageAsset(name: "menu")
   public static let orders = ImageAsset(name: "orders")
   public static let search = ImageAsset(name: "search")
