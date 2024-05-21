@@ -22,6 +22,7 @@ public enum Shared {
     public static let entrees = ImageAsset(name: "Images/entrees")
     public static let fishes = ImageAsset(name: "Images/fishes")
     public static let garnishes = ImageAsset(name: "Images/garnishes")
+    public static let pets = ImageAsset(name: "Images/pets")
     public static let salads = ImageAsset(name: "Images/salads")
     public static let seafood = ImageAsset(name: "Images/seafood")
     public static let emptyDish = ImageAsset(name: "Images/emptyDish")
