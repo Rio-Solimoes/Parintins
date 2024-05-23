@@ -110,5 +110,53 @@
   "price": 25,
   "category": "Sobremesas",
   "estimated_prep_time": 60
+ },
+ {
+  "id": 15,
+  "name": "Biscoitos de banana com manteiga de amendoim",
+  "description": "Biscoitos feitos com banana, aveia em flocos, e manteiga de amendoim natural.",
+  "price": 16,
+  "category": "Pets",
+  "estimated_prep_time": 30
+ },
+ {
+  "id": 16,
+  "name": "Biscoitos de bacon",
+  "description": "Biscoitos feitos com bacon, banana, manteiga de amendoim e farinha de aveia.",
+  "price": 20,
+  "category": "Pets",
+  "estimated_prep_time": 45
+ },
+ {
+  "id": 17,
+  "name": "Biscoitos de frango e batata doce",
+  "description": "Biscoitos feitos com carne de  frango, batata doce, ovos e farinha de trigo.",
+  "price": 10,
+  "category": "Pets",
+  "estimated_prep_time": 60
+ },
+ {
+  "id": 18,
+  "name": "Biscoito de abóbora",
+  "description": "Biscoitos feitos com salmão, purê de abóbora, ovo, aveia em flocos grossos e óleo de abacate.",
+  "price": 12,
+  "category": "Pets",
+  "estimated_prep_time": 30
+ },
+ {
+  "id": 19,
+  "name": "Biscoito de atum",
+  "description": "Biscoitos feitos com atum, ovo, farinha de trigo, e óleo de oliva.",
+  "price": 15,
+  "category": "Pets",
+  "estimated_prep_time": 30
+ },
+ {
+  "id": 20,
+  "name": "Biscoito de salmão",
+  "description": "Biscoitos feitos com salmão, purê de abóbora, ovo e flocos de aveia.",
+  "price": 30,
+  "category": "Pets",
+  "estimated_prep_time": 50
  }
 ]
